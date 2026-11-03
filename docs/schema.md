@@ -24,7 +24,7 @@ erDiagram
         int    release_year
         text   genre
         text   description
-        vector embedding "VECTOR — added by the vector half"
+        vector embedding "VECTOR — declared here, filled by the vector half"
     }
     activity_log {
         bigint      event_id PK

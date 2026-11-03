@@ -36,12 +36,12 @@ with a smaller, faster index.
 
 ## Setup and run
 
-Needs Docker (or a local PostgreSQL 16). From the repo root:
+Needs Docker (or a local PostgreSQL 16 with the pgvector extension). From the repo root:
 
 ```bash
-# start a Postgres
+# start a Postgres that has pgvector
 docker run -d --name ca3-pg -e POSTGRES_PASSWORD=ca3 -e POSTGRES_USER=ca3 -e POSTGRES_DB=ca3 \
-  -p 5433:5432 -v "$PWD":/repo postgres:16
+  -p 5433:5432 -v "$PWD":/repo pgvector/pgvector:pg16
 
 # build + load (JSONB half)
 psql postgresql://ca3:ca3@localhost:5433/ca3 -f sql/01_schema.sql
@@ -51,10 +51,11 @@ psql postgresql://ca3:ca3@localhost:5433/ca3 -f sql/04_seed_activity.sql
 psql postgresql://ca3:ca3@localhost:5433/ca3 -f sql/05_jsonb_queries.sql
 ```
 
-**Vector half:** enable pgvector and load the title embeddings by following
-`docs/CA3_Making_the_Embeddings.docx` with `notebooks/ca3_make_embeddings_vscode.ipynb`
-(`pip install -r requirements.txt`). That adds the `embedding` column to `titles` and the
-`search_phrases` table, then the vector queries run.
+**Vector half:** the schema already declares `titles.embedding vector(384)` (left NULL). To fill it,
+follow `docs/CA3_Making_the_Embeddings.docx` with `notebooks/ca3_make_embeddings_vscode.ipynb`
+(`pip install -r requirements.txt`). The notebook generates two SQL files: one upserts the 384-dim
+title embeddings by `title_id` (so they land in the existing rows) and adds an HNSW index, the other
+creates and loads the `search_phrases` table. Then the three vector queries run.
 
 ## Data
 

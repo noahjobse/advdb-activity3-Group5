@@ -4,6 +4,10 @@
 -- Altesse's vector half extends `titles` with an `embedding vector(384)` column and adds the
 -- `search_phrases` table + pgvector (see notebooks/ and CA3_Making_the_Embeddings).
 
+-- pgvector is used by the title/search-phrase embeddings (the vector half); declared here so the
+-- shared `titles` table matches what the embeddings notebook expects.
+CREATE EXTENSION IF NOT EXISTS vector;
+
 DROP TABLE IF EXISTS activity_log, search_phrases, users, titles CASCADE;
 
 -- Structured profile columns + a JSONB column for preferences that vary per user.
@@ -16,14 +20,16 @@ CREATE TABLE users (
     preferences  jsonb NOT NULL          -- {favourite_genres:[...], subtitle_language, parental_controls}
 );
 
--- The title catalogue (loaded from data/ca3_titles.csv). Altesse adds `embedding vector(384)`.
+-- The title catalogue (loaded from data/ca3_titles.csv). `embedding` is left NULL here and filled
+-- by the vector half (the embeddings notebook upserts the 384-dim vectors by title_id).
 CREATE TABLE titles (
     title_id     bigint PRIMARY KEY,
     title        text NOT NULL,
     kind         text NOT NULL,
     release_year int,
     genre        text,
-    description  text NOT NULL
+    description  text NOT NULL,
+    embedding    vector(384)
 );
 
 -- Semi-structured events: each row is one event, its shape varies by type -> stored as JSONB.
