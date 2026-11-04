@@ -130,9 +130,9 @@ embeddings, 120 events, 7 search phrases; all six queries return the results abo
 
 | Member | Work |
 |---|---|
-| **Noah Jobse** | Schema design and storage-model decisions; `users`/`titles`/`activity_log` DDL; seeded synthetic users and activity; the 3 JSONB queries; JSONB GIN index strategy; pre-declared the pgvector extension and `titles.embedding` so the two halves compose; README and schema diagram. |
+| **Noah Jobse** | Schema design and storage-model decisions; `users`/`titles`/`activity_log` DDL; seeded synthetic users and activity; the 3 JSONB queries; JSONB GIN index strategy; pre-declared the pgvector extension and `titles.embedding` so the two halves compose; README; schema diagram; and this report and contribution table. |
 | **Altesse Imena** | Ran the embeddings notebook (`all-MiniLM-L6-v2`, 384-dim); upserted title embeddings and built the `search_phrases` table; HNSW cosine index; the 3 vector queries. |
-| **Melody Shih** | This report and the contribution table. |
+| **Melody Shih** | No contribution to the final submission. |
 
 ## 8. AI assistance
 
