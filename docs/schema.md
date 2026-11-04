@@ -2,7 +2,7 @@
 
 Renders on GitHub. For the submission, export this as a PDF/image (GitHub's rendered view,
 mermaid.live, or redraw in draw.io). **JSONB** columns: `users.preferences`, `activity_log.details`.
-**Vector** column: `titles.embedding` (added by the vector half).
+**Vector** columns: `titles.embedding` and `search_phrases.embedding` (384 numbers each).
 
 ```mermaid
 erDiagram
@@ -24,7 +24,7 @@ erDiagram
         int    release_year
         text   genre
         text   description
-        vector embedding "VECTOR — declared here, filled by the vector half"
+        vector embedding "VECTOR(384) — all-MiniLM-L6-v2 of description"
     }
     activity_log {
         bigint      event_id PK
@@ -35,9 +35,9 @@ erDiagram
         jsonb       details "JSONB — varies by event_type"
     }
     search_phrases {
-        bigint id PK
+        int    phrase_id PK
         text   phrase
-        vector embedding "VECTOR — vector half"
+        vector embedding "VECTOR(384) — same model as titles"
     }
 ```
 
@@ -54,4 +54,9 @@ erDiagram
 { "stars": 4 }                                  // rate
 { "query": "scary woods", "results": 5 }        // search
 { "at_minute": 18 }                             // pause
+```
+
+`titles.embedding` / `search_phrases.embedding` (vector, 384 numbers, unit length; truncated):
+```
+[0.026728, -0.023253, 0.12064, ..., ]   -- titles.embedding for title 1, "The Last Lighthouse"
 ```
